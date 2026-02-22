@@ -1,11 +1,10 @@
 {
   "name": "STYLO",
   "repository": "https://github.com/baDr-otaiBi/stylo",
+  "support_url": "https://t.me/salladev",
   "settings": {
     "version": "1.0.0",
-    "theme_name": "STYLO",
-    "repo_url": "",
-    "support_url": "https://t.me/salladev"
+    "theme_name": "STYLO"
   },
   "theme_settings": {
     "topnav_is_dark": {
@@ -25,11 +24,6 @@
       "label": "Show Collection Grid on Home",
       "default": true
     },
-    "show_trending_badge": {
-      "type": "checkbox",
-      "label": "Show Trending Badge on Products",
-      "default": true
-    },
     "product_card_style": {
       "type": "select",
       "label": "Product Card Style",
@@ -40,17 +34,6 @@
       "type": "checkbox",
       "label": "Show Size Guide on Product Page",
       "default": true
-    },
-    "instagram_feed_enabled": {
-      "type": "checkbox",
-      "label": "Enable Instagram Feed Section",
-      "default": true
-    },
-    "newsletter_style": {
-      "type": "select",
-      "label": "Newsletter Section Style",
-      "options": ["minimal", "fullwidth", "split"],
-      "default": "split"
     }
   },
   "features": [
