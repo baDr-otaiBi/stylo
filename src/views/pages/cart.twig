@@ -1,99 +1,12 @@
-{#
-  Vogue Fashion Theme - Cart Page
-#}
-
-{% extends "layouts/master.twig" %}
-
+{% extends "layouts.master" %}
 {% block content %}
-<div class="vf-cart-page">
-    <div class="vf-container">
-
-        <div class="vf-page-header text-center">
-            <h1 class="vf-page-title">{{ trans('themes.header.cart') }}</h1>
-        </div>
-
-        <salla-cart-summary>
-            <div class="vf-cart-layout">
-                {# Cart Items #}
-                <div class="vf-cart-items">
-                    <salla-cart-item></salla-cart-item>
-                </div>
-
-                {# Cart Summary Sidebar #}
-                <div class="vf-cart-sidebar">
-                    <div class="vf-cart-summary-box">
-                        <h3 class="vf-cart-summary-box__title">
-                            {{ trans('themes.product.order_summary') | default('ملخص الطلب') }}
-                        </h3>
-                        <salla-cart-totals></salla-cart-totals>
-                        
-                        {# Coupon #}
-                        <salla-coupon></salla-coupon>
-
-                        {# Checkout Button #}
-                        <salla-checkout-btn class="vf-btn vf-btn--primary vf-btn--full">
-                        </salla-checkout-btn>
-
-                        {# Continue Shopping #}
-                        <a href="{{ link('products') }}" class="vf-btn vf-btn--secondary vf-btn--full">
-                            {{ trans('themes.home.shop_now') | default('متابعة التسوق') }}
-                        </a>
-                    </div>
-
-                    {# Trust Badges #}
-                    <div class="vf-trust-badges" style="margin-top: 1.5rem;">
-                        <div class="vf-trust-badge">
-                            <i class="sicon-lock"></i>
-                            <span>{{ trans('themes.product.secure_payment') }}</span>
-                        </div>
-                        <div class="vf-trust-badge">
-                            <i class="sicon-repeat"></i>
-                            <span>{{ trans('themes.product.easy_returns') }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </salla-cart-summary>
-
+    <div class="container">
+        <nav class="breadcrumbs w-full py-5">
+            <salla-breadcrumb></salla-breadcrumb>
+        </nav>
+        <salla-cart-summary-widget></salla-cart-summary-widget>
     </div>
-</div>
-
-<style>
-    .vf-cart-layout {
-        display: grid;
-        grid-template-columns: 1fr 380px;
-        gap: 2.5rem;
-        align-items: start;
-    }
-
-    .vf-cart-summary-box {
-        background: var(--vf-cream);
-        padding: 2rem;
-        position: sticky;
-        top: 120px;
-    }
-
-    .vf-cart-summary-box__title {
-        font-family: var(--vf-font-display);
-        font-size: 1.25rem;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid var(--vf-sand);
-    }
-
-    .vf-cart-summary-box .vf-btn {
-        margin-top: 0.75rem;
-    }
-
-    @media (max-width: 1023px) {
-        .vf-cart-layout {
-            grid-template-columns: 1fr;
-        }
-
-        .vf-cart-summary-box {
-            position: static;
-        }
-    }
-</style>
 {% endblock %}
-
+{% block scripts %}
+    <script defer src="{{ 'checkout.js' | asset }}"></script>
+{% endblock %}

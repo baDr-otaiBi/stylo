@@ -1,72 +1,41 @@
 {#
-  Vogue Fashion Theme - Products Listing Page
+| Variable                   | Type        | Description                                                          |
+|----------------------------|-------------|----------------------------------------------------------------------|
+| page                       | object      |                                                                      |
+| page.title                 | string      | *could be html                                                       |
+| page.slug                  | string      | ex: "cat.show"                                                       |
+| category                   | ?Category   |                                                                      |
+| filters                    | bool        | is filters allowed here or not                                       |
+| sort_options[]             | SortList[]  |                                                                      |
+| search_query               | ?string     |                                                                      |
 #}
-
-{% extends "layouts/master.twig" %}
-
+{% extends "layouts.master" %}
 {% block content %}
-<div class="vf-products-page">
-    <div class="vf-container">
-
-        {# Page Header #}
-        <div class="vf-page-header">
-            <nav class="vf-breadcrumb">
-                <a href="{{ store.url }}">{{ trans('themes.common.home') }}</a>
-                <span class="vf-breadcrumb__sep">/</span>
-                {% if category %}
-                    <span class="vf-breadcrumb__current">{{ category.name }}</span>
-                {% else %}
-                    <span class="vf-breadcrumb__current">{{ trans('themes.common.products') }}</span>
-                {% endif %}
-            </nav>
-
-            <div class="vf-page-header__title-row">
-                <h1 class="vf-page-title">
-                    {% if category %}
-                        {{ category.name }}
-                    {% else %}
-                        {{ trans('themes.common.products') }}
-                    {% endif %}
-                </h1>
-                {% if products.total is defined %}
-                    <span class="vf-results-count">({{ products.total }} {{ trans('themes.home.products') }})</span>
-                {% endif %}
-            </div>
-        </div>
-
-        {# Filters & Sort Bar #}
-        <div class="vf-toolbar">
-            <div class="vf-toolbar__filters">
-                <salla-filters></salla-filters>
-            </div>
-            <div class="vf-toolbar__sort">
-                <salla-products-sort></salla-products-sort>
-            </div>
-        </div>
-
-        {# Products Grid #}
-        <div class="vf-products-grid" id="productsGrid">
-            {% for product in products %}
-                {% include 'pages/product/card.twig' with { product: product } %}
-            {% endfor %}
-        </div>
-
-        {# Empty State #}
-        {% if products|length == 0 %}
-        <div class="vf-empty-state">
-            <i class="sicon-shopping-bag"></i>
-            <h3>{{ trans('themes.common.no_products') | default('لا توجد منتجات') }}</h3>
-        </div>
-        {% endif %}
-
-        {# Pagination #}
-        {% if products.links is defined %}
-        <nav class="vf-pagination">
-            <salla-products-pagination></salla-products-pagination>
+    <div class="container px-2.5 ms:px-5 mb-10">
+        <nav class="breadcrumbs w-full py-5">
+            <salla-breadcrumb></salla-breadcrumb>
         </nav>
-        {% endif %}
+        <div class="flex items-start flex-col md:flex-row">
+            {% if filters %}
+                <button class="btn--close-sm close-filters sicon-cancel hidden"></button>
+                <salla-filters class="md:w-72 lg:sticky lg:top-20 flex-none" id="filters-menu"></salla-filters>
+            {% endif %}
 
+            <div class="main-content flex-1 w-full {{ filters ? 'md:rtl:mr-8 md:ltr:ml-8' : '' }}">
+                {% if category %}
+                    {% if category.image %}
+                        <div class="mb-5">
+                            <img class="w-full max-h-[200px] object-cover rounded-md bg-gray-100" 
+                                 src="{{ category.image }}" alt="{{ category.name }}"/>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                <salla-products-list source="{{page.slug}}" source-value="{{page.id}}"></salla-products-list>
+            </div>
+        </div>
     </div>
-</div>
 {% endblock %}
-
+{% block scripts %}
+    <script defer src="{{ 'pages.js' | asset }}"></script>
+{% endblock %}

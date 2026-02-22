@@ -1,214 +1,80 @@
 {#
-  Vogue Fashion Theme - Header Component
-  Elegant sticky header with fashion-forward design
+| Variable         | Type    | Description                     |
+|------------------|---------|---------------------------------|
+| cart             | object  |                                 |
+| cart.items_count | int     |                                 |
+| cart.total       | string  | Formatted total ex: "١٠٠ ر.س"   |
 #}
+{% set important_links = theme.settings.get('important_links') %}
+<header class="store-header">
+  {# Top Nav #}
+  <div class="top-navbar">
+    <div class="container flex justify-between">
+      <div class="flex-1 flex items-center gap-2">
+          {% if important_links %}
+            <salla-menu source="footer" topnav></salla-menu>
+          {% endif %}
 
-<header class="vf-header" id="siteHeader">
-    {# Top Bar - Contact/Social/Language #}
-    <div class="vf-header__topbar">
-        <div class="vf-container flex items-center justify-between">
-            {# Social Links #}
-            <div class="vf-header__social flex items-center gap-4">
-                {% if store.settings.social.instagram %}
-                    <a href="{{ store.settings.social.instagram }}" target="_blank" rel="noopener" aria-label="Instagram">
-                        <i class="sicon-instagram"></i>
-                    </a>
-                {% endif %}
-                {% if store.settings.social.twitter %}
-                    <a href="{{ store.settings.social.twitter }}" target="_blank" rel="noopener" aria-label="Twitter">
-                        <i class="sicon-twitter"></i>
-                    </a>
-                {% endif %}
-                {% if store.settings.social.snapchat %}
-                    <a href="{{ store.settings.social.snapchat }}" target="_blank" rel="noopener" aria-label="Snapchat">
-                        <i class="sicon-snapchat"></i>
-                    </a>
-                {% endif %}
-            </div>
+          <div class="header-buttons">
+              {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
+                  <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray basis-0">
+                      <span>{{ user.language.name }}</span>
+                      <span class="mx-1.5">|</span> <span>{{ currency.symbol }}</span>
+                  </button>
+                  <salla-localization-modal></salla-localization-modal>
+              {% endif %}
+          </div>
 
-            {# Delivery Note #}
-            <div class="vf-header__note text-xs tracking-wider uppercase hidden md:block">
-                {{ trans('themes.header.free_shipping_note') }}
-            </div>
+          {% if store.scope %}
+              <button class="btn--rounded-gray"
+                      onclick="salla.event.dispatch('scopes::open', {'mode': 'default'})">
+                  <i class="sicon-location rtl:ml-1 ltr:mr-1"></i> {{ store.scope.name }}
+              </button>
+          {% endif %}
 
-            {# Language Switcher & Currency #}
-            <div class="vf-header__utils flex items-center gap-4">
-                {% if store.settings.is_multilingual %}
-                    <salla-locale-switch></salla-locale-switch>
-                {% endif %}
-                {% if store.settings.currencies_enabled %}
-                    <salla-currency-switch></salla-currency-switch>
-                {% endif %}
-            </div>
-        </div>
+          <div class="header-search flex-1">
+            <salla-search inline oval height="36"></salla-search>
+          </div>
+      </div>
+
+      <salla-contacts is-header></salla-contacts>
     </div>
+  </div>
 
-    {# Main Header #}
-    <div class="vf-header__main">
-        <div class="vf-container flex items-center justify-between py-4 lg:py-5">
-
-            {# Mobile Menu Toggle #}
-            <button class="vf-header__menu-toggle lg:hidden" id="mobileMenuToggle" aria-label="Toggle Menu">
-                <span class="vf-hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </span>
-            </button>
-
-            {# Logo #}
-            <a href="{{ store.url }}" class="vf-header__logo">
-                {% if store.logo %}
-                    <img src="{{ store.logo }}" alt="{{ store.name }}" class="vf-header__logo-img" loading="eager">
-                {% else %}
-                    <span class="vf-header__logo-text">{{ store.name }}</span>
-                {% endif %}
-            </a>
-
-            {# Desktop Navigation #}
-            <nav class="vf-header__nav hidden lg:flex items-center gap-8" aria-label="Main navigation">
-                {% for item in store.menu %}
-                    <div class="vf-nav-item group relative">
-                        <a href="{{ item.url }}" class="vf-nav-link">
-                            {{ item.title }}
-                            {% if item.children|length > 0 %}
-                                <i class="sicon-keyboard_arrow_down text-xs transition-transform group-hover:rotate-180"></i>
-                            {% endif %}
-                        </a>
-
-                        {# Dropdown Menu #}
-                        {% if item.children|length > 0 %}
-                            <div class="vf-nav-dropdown">
-                                <div class="vf-nav-dropdown__inner">
-                                    {% for child in item.children %}
-                                        <a href="{{ child.url }}" class="vf-nav-dropdown__link">
-                                            {{ child.title }}
-                                        </a>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            </nav>
-
-            {# Header Actions #}
-            <div class="vf-header__actions flex items-center gap-3 lg:gap-5">
-                {# Search #}
-                <button onclick="salla.event.dispatch('salla-search::open')" class="vf-header__action" aria-label="Search">
-                    <i class="sicon-search text-lg"></i>
-                </button>
-
-                {# User Account #}
-                {% if customer %}
-                    <a href="{{ link('profile') }}" class="vf-header__action" aria-label="Account">
-                        <i class="sicon-user-circle text-lg"></i>
-                    </a>
-                {% else %}
-                    <salla-login-modal>
-                        <button class="vf-header__action" aria-label="Login">
-                            <i class="sicon-user text-lg"></i>
-                        </button>
-                    </salla-login-modal>
-                {% endif %}
-
-                {# Wishlist #}
-                <a href="{{ link('wishlist') }}" class="vf-header__action relative" aria-label="Wishlist">
-                    <i class="sicon-heart text-lg"></i>
-                </a>
-
-                {# Cart #}
-                <salla-cart-summary class="vf-header__cart">
-                    <button class="vf-header__action vf-cart-btn relative" aria-label="Cart">
-                        <i class="sicon-shopping-bag text-lg"></i>
-                        <span class="vf-cart-count" id="cartCount">
-                            {{ cart.count }}
-                        </span>
-                    </button>
-                </salla-cart-summary>
-            </div>
-        </div>
-    </div>
-
-    {# Categories Bar (Optional - for fashion categories) #}
-    {% if store.categories|length > 0 %}
-    <div class="vf-header__categories hidden lg:block border-t border-gray-100">
-        <div class="vf-container">
-            <div class="flex items-center justify-center gap-8 py-3">
-                {% for category in store.categories %}
-                    <a href="{{ category.url }}" class="vf-category-link">
-                        {{ category.name }}
-                    </a>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    {% endif %}
+  {# Main Nav #}
+  <div id="mainnav" class="main-nav-container shadow-default bg-white flex items-center">
+      <div class="inner bg-inherit w-full">
+          <div class="container">
+              <div class="flex items-stretch justify-between relative">
+                  <div class="flex items-center">
+                      <a class="lg:hidden mburger mburger--collapse leading-none rtl:ml-4 ltr:mr-4" href="#mobile-menu" aria-label="Open-menu">
+                        <i class="sicon-menu text-primary text-2xl"></i>
+                      </a>
+                      <a class="navbar-brand" href="{{ store.url }}">
+                          <img fetchpriority="high" width="100%"
+                          height="100%" loading="eager" src="{{ store.logo|cdn(175) }}" alt="{{ store.name }} logo">
+                          {% if is_page('index') %}
+                            <h1 class="sr-only">{{ store.name }}</h1>
+                          {% else %}
+                            <h2 class="sr-only">{{ store.name }}</h2>
+                          {% endif %}
+                      </a>
+                      <custom-main-menu></custom-main-menu>
+                  </div>
+                  <div class="flex items-center justify-end my-2.5">
+                      {% if user.type=='user' %}
+                        <salla-user-menu avatar-only show-header></salla-user-menu>
+                      {% else %}
+                          <button class="header-btn" aria-label="user-icon" onclick="salla.event.dispatch('login::open')">
+                            <i class="header-btn__icon sicon-user-circle"></i>
+                          </button>
+                      {% endif %}
+                      <salla-cart-summary class="ml-4 rtl:ml-[unset] rtl:mr-4">
+                        <i slot="icon" class="header-btn__icon icon sicon-shopping-bag"></i>
+                      </salla-cart-summary>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
 </header>
-
-{# Mobile Sidebar Menu #}
-<div class="vf-mobile-menu" id="mobileMenu">
-    <div class="vf-mobile-menu__overlay" id="mobileOverlay"></div>
-    <div class="vf-mobile-menu__panel">
-        <div class="vf-mobile-menu__header">
-            <span class="font-display text-lg">{{ trans('themes.header.menu') }}</span>
-            <button class="vf-mobile-menu__close" id="mobileMenuClose" aria-label="Close menu">
-                <i class="sicon-cancel"></i>
-            </button>
-        </div>
-
-        <nav class="vf-mobile-menu__nav">
-            {% for item in store.menu %}
-                <a href="{{ item.url }}" class="vf-mobile-menu__link">
-                    {{ item.title }}
-                </a>
-                {% if item.children|length > 0 %}
-                    {% for child in item.children %}
-                        <a href="{{ child.url }}" class="vf-mobile-menu__link vf-mobile-menu__link--child">
-                            {{ child.title }}
-                        </a>
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-        </nav>
-
-        <div class="vf-mobile-menu__footer">
-            {% if customer %}
-                <a href="{{ link('profile') }}" class="vf-mobile-menu__link">
-                    <i class="sicon-user-circle"></i> {{ trans('themes.header.my_account') }}
-                </a>
-            {% endif %}
-            <a href="{{ link('wishlist') }}" class="vf-mobile-menu__link">
-                <i class="sicon-heart"></i> {{ trans('themes.header.wishlist') }}
-            </a>
-        </div>
-    </div>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const header = document.getElementById('siteHeader');
-    const toggle = document.getElementById('mobileMenuToggle');
-    const menu = document.getElementById('mobileMenu');
-    const close = document.getElementById('mobileMenuClose');
-    const overlay = document.getElementById('mobileOverlay');
-
-    // Sticky Header
-    let lastScroll = 0;
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.scrollY;
-        header.classList.toggle('vf-header--scrolled', currentScroll > 80);
-        header.classList.toggle('vf-header--hidden', currentScroll > lastScroll && currentScroll > 200);
-        lastScroll = currentScroll;
-    });
-
-    // Mobile Menu
-    const openMenu = () => menu.classList.add('active');
-    const closeMenu = () => menu.classList.remove('active');
-
-    toggle.addEventListener('click', openMenu);
-    close.addEventListener('click', closeMenu);
-    overlay.addEventListener('click', closeMenu);
-});
-</script>
-

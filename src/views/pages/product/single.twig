@@ -1,308 +1,226 @@
 {#
-  Vogue Fashion Theme - Single Product Page
-  Fashion-optimized product detail page
+| Variable                               | Type                        | Description                                                            |
+|----------------------------------------|-----------------------------|------------------------------------------------------------------------|
+| product                                | Product                     |                                                                        |
+| product.id                             | int                         |                                                                        |
+| product.name                           | string                      |                                                                        |
+| product.description                    | string                      | HTML                                                                   |
+| product.url                            | string                      |                                                                        |
+| product.type                           | string                      | product, service, group_products, codes, digital, food, donating       |
+| product.status                         | string                      | sale, out, out-and-notify                                              |
 #}
-
-{% extends "layouts/master.twig" %}
-
+{% extends "layouts.master" %}
 {% block content %}
-<div class="vf-product-page">
-    <div class="vf-container">
-
-        {# Breadcrumb #}
-        <nav class="vf-breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ store.url }}">{{ trans('themes.common.home') }}</a>
-            <span class="vf-breadcrumb__sep">/</span>
-            {% if product.category %}
-                <a href="{{ product.category.url }}">{{ product.category.name }}</a>
-                <span class="vf-breadcrumb__sep">/</span>
-            {% endif %}
-            <span class="vf-breadcrumb__current">{{ product.name }}</span>
+    <div class="container">
+        <nav class="breadcrumbs w-full py-5">
+            <salla-breadcrumb></salla-breadcrumb>
         </nav>
+        <div class="flex flex-col items-start md:flex-row" id="product-{{ product.id }}">
+            <div class="sidebar md:sticky top-24 w-full md:!w-2/4 rtl:ml-8 ltr:mr-8 pb-8 md:pb-16 overflow-hidden shrink-0">
+                {% set has_many_images = product.images|length > 1 %}
+                <salla-slider
+                        id="details-slider-{{ product.id }}"
+                        class="details-slider rounded-md image-slider"
+                        type="thumbs"
+                        loop="false"
+                        auto-height
+                        listen-to-thumbnails-option
+                        show-thumbs-controls="false">
+                    {% if product.promotion_title %}
+                        <div class="promotion-title">{{ product.promotion_title }}</div>
+                    {% endif %}
 
-        <div class="vf-product-layout">
-            {# ==================== PRODUCT GALLERY ==================== #}
-            <div class="vf-product-gallery">
-                {# Main Image #}
-                <div class="vf-product-gallery__main" id="productMainImage">
-                    <div class="vf-product-gallery__zoom">
-                        <img src="{{ product.image.url }}"
-                             alt="{{ product.image.alt | default(product.name) }}"
-                             class="vf-product-gallery__img"
-                             id="mainProductImage">
+                    <salla-button
+                            shape="icon" color="light" aria-label="Wishlist button"
+                            class="btn--wishlist animated"
+                            onclick="salla.wishlist.toggle({{ product.id }})"
+                            id="wishlist-{{ product.id }}"
+                            data-id="{{ product.id }}">
+                        <i class="sicon-heart"></i>
+                    </salla-button>
 
-                        {# Badges #}
-                        {% if product.is_on_sale %}
-                            <span class="vf-badge vf-badge--sale vf-badge--large">
-                                {{ product.discount_percentage }}% {{ trans('themes.product.off') }}
-                            </span>
-                        {% endif %}
-                    </div>
-                </div>
-
-                {# Thumbnail Gallery #}
-                {% if product.images|length > 1 %}
-                <div class="vf-product-gallery__thumbs">
-                    {% for image in product.images %}
-                        <button class="vf-product-gallery__thumb {{ loop.first ? 'active' : '' }}"
-                                data-image="{{ image.url }}"
-                                onclick="changeMainImage(this)">
-                            <img src="{{ image.url }}" alt="{{ image.alt | default(product.name) }}" loading="lazy">
-                        </button>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </div>
-
-            {# ==================== PRODUCT INFO ==================== #}
-            <div class="vf-product-info">
-                {# Brand #}
-                {% if product.brand %}
-                    <a href="{{ product.brand.url }}" class="vf-product-info__brand">
-                        {{ product.brand.name }}
-                    </a>
-                {% endif %}
-
-                {# Title #}
-                <h1 class="vf-product-info__title">{{ product.name }}</h1>
-
-                {# Rating #}
-                {% if product.rating and product.rating.count > 0 %}
-                <div class="vf-product-info__rating">
-                    <div class="vf-stars">
-                        {% for i in 1..5 %}
-                            <i class="sicon-star{% if i > product.rating.stars %}-o{% endif %}"></i>
+                    <div slot="items">
+                        {% for image in product.images %}
+                            <div class="swiper-slide lazy-load {{ image.video_url?'video-entry':'' }} {{ image.three_d_image_url?'model-entry':'' }}">
+                                {% if image.video_url %}
+                                    <a href="{{ image.video_url }}" class="btn-video-entry magnify-entry">
+                                        <img src="{{ image.url }}" alt="{{ image.alt }}"
+                                             class="s-product-slider-image"/>
+                                    </a>
+                                {% elseif image.three_d_image_url %}
+                                    <model-viewer src="{{ image.three_d_image_url }}" camera-controls auto-rotate
+                                                  ar class="w-full h-full"></model-viewer>
+                                {% else %}
+                                    <a data-fslightbox="product_{{ product.id }}" data-type="image" href="{{ image.url }}" aria-label="{{ image.alt }}">
+                                        <img src="{{ image.url }}"
+                                             alt="{{ image.alt }}"
+                                             class="s-product-slider-image"/>
+                                    </a>
+                                {% endif %}
+                            </div>
                         {% endfor %}
                     </div>
-                    <span>({{ product.rating.count }} {{ trans('themes.product.reviews') }})</span>
-                </div>
-                {% endif %}
 
-                {# Price #}
-                <div class="vf-product-info__price">
-                    {% if product.is_on_sale %}
-                        <span class="vf-price-main vf-price-main--sale">{{ product.sale_price }}</span>
-                        <span class="vf-price-original">{{ product.regular_price }}</span>
-                        <span class="vf-price-save">
-                            {{ trans('themes.product.you_save') }} {{ product.discount_percentage }}%
-                        </span>
-                    {% else %}
-                        <span class="vf-price-main">{{ product.price }}</span>
-                    {% endif %}
-
-                    {% if store.settings.tax_included %}
-                        <span class="vf-tax-note">{{ trans('themes.product.tax_included') }}</span>
-                    {% endif %}
-                </div>
-
-                {# Short Description #}
-                {% if product.short_description %}
-                <div class="vf-product-info__desc">
-                    {{ product.short_description }}
-                </div>
-                {% endif %}
-
-                {# Product Options (Size, Color, etc.) #}
-                <salla-product-options product-id="{{ product.id }}" class="vf-product-options">
-                </salla-product-options>
-
-                {# Size Guide Button #}
-                {% if theme.settings.show_size_guide %}
-                <button class="vf-size-guide-btn" onclick="document.getElementById('sizeGuideModal').classList.add('active')">
-                    <i class="sicon-ruler"></i>
-                    {{ trans('themes.product.size_guide') }}
-                </button>
-                {% endif %}
-
-                {# Quantity & Add to Cart #}
-                <div class="vf-product-actions">
-                    <salla-quantity-input product-id="{{ product.id }}" class="vf-quantity">
-                    </salla-quantity-input>
-
-                    <salla-add-product-btn product-id="{{ product.id }}" class="vf-btn vf-btn--primary vf-btn--full">
-                        <i class="sicon-shopping-bag"></i>
-                        {{ trans('themes.product.add_to_cart') }}
-                    </salla-add-product-btn>
-                </div>
-
-                {# Buy Now #}
-                <salla-add-product-btn product-id="{{ product.id }}" quick-buy class="vf-btn vf-btn--secondary vf-btn--full">
-                    {{ trans('themes.product.buy_now') }}
-                </salla-add-product-btn>
-
-                {# Wishlist & Share #}
-                <div class="vf-product-meta-actions">
-                    <salla-wishlist-btn product-id="{{ product.id }}" class="vf-meta-action">
-                        <i class="sicon-heart"></i>
-                        <span>{{ trans('themes.product.add_to_wishlist') }}</span>
-                    </salla-wishlist-btn>
-
-                    <salla-share-btn class="vf-meta-action">
-                        <i class="sicon-share"></i>
-                        <span>{{ trans('themes.product.share') }}</span>
-                    </salla-share-btn>
-                </div>
-
-                {# Trust Badges #}
-                <div class="vf-trust-badges">
-                    <div class="vf-trust-badge">
-                        <i class="sicon-shipping-fast"></i>
-                        <span>{{ trans('themes.product.fast_shipping') }}</span>
-                    </div>
-                    <div class="vf-trust-badge">
-                        <i class="sicon-repeat"></i>
-                        <span>{{ trans('themes.product.easy_returns') }}</span>
-                    </div>
-                    <div class="vf-trust-badge">
-                        <i class="sicon-lock"></i>
-                        <span>{{ trans('themes.product.secure_payment') }}</span>
-                    </div>
-                </div>
-
-                {# SKU & Categories #}
-                <div class="vf-product-meta">
-                    {% if product.sku %}
-                        <div class="vf-product-meta__item">
-                            <span>{{ trans('themes.product.sku') }}:</span>
-                            <span>{{ product.sku }}</span>
-                        </div>
-                    {% endif %}
-                    {% if product.category %}
-                        <div class="vf-product-meta__item">
-                            <span>{{ trans('themes.product.category') }}:</span>
-                            <a href="{{ product.category.url }}">{{ product.category.name }}</a>
-                        </div>
-                    {% endif %}
-                    {% if product.tags|length > 0 %}
-                        <div class="vf-product-meta__item">
-                            <span>{{ trans('themes.product.tags') }}:</span>
-                            {% for tag in product.tags %}
-                                <a href="{{ tag.url }}">{{ tag.name }}{% if not loop.last %}, {% endif %}</a>
+                    {% if has_many_images %}
+                        <div slot="thumbs">
+                            {% for image in product.images %}
+                                <div class="slide--one-fourth {{ image.video_url?'video-entry':'' }} {{ image.three_d_image_url?'model-entry':'' }}">
+                                    <img src="{{ image.url }}"
+                                         loading="{{ loop.index < 5 ? 'eager' : 'lazy' }}"
+                                         class="object-cover w-full h-full bg-gray-100 rounded-md overflow-hidden"
+                                         title="{{ image.alt }}"
+                                         alt="{{ image.alt }}"/>
+                                </div>
                             {% endfor %}
                         </div>
                     {% endif %}
-                </div>
+                </salla-slider>
             </div>
-        </div>
 
-        {# ==================== PRODUCT TABS ==================== #}
-        <div class="vf-product-tabs" id="productTabs">
-            <div class="vf-tabs-nav">
-                <button class="vf-tab-btn active" data-tab="description">
-                    {{ trans('themes.product.description') }}
-                </button>
-                {% if product.has_specifications %}
-                <button class="vf-tab-btn" data-tab="specifications">
-                    {{ trans('themes.product.specifications') }}
-                </button>
+            <div class="main-content md:sticky md:overflow-hidden top-24 w-full md:w-2/4 md:pb-16">
+
+                {% hook 'product:single.description.start' %}
+
+                {% if product.brand.name %}
+                    <div class="product-brand mb-5 w-12">
+                        <a class="brand-logo" href="{{ product.brand.url }}" title="{{ product.brand.name }}">
+                            <img width="100%" height="100%" class="max-h-full object-contain"
+                                 src="{{ product.brand.logo }}"
+                                 title="{{ product.brand.name }}"
+                                 alt="{{ product.brand.name }}">
+                        </a>
+                    </div>
                 {% endif %}
-                <button class="vf-tab-btn" data-tab="reviews">
-                    {{ trans('themes.product.reviews') }}
-                    {% if product.rating %}({{ product.rating.count }}){% endif %}
-                </button>
-            </div>
 
-            <div class="vf-tabs-content">
-                <div class="vf-tab-panel active" id="tab-description">
-                    <div class="vf-prose">
+                <h1 class="text-xl md:text-2xl leading-10 font-bold mb-6 text-gray-800">{{ product.name }}</h1>
+
+                {% if product.subtitle %}
+                    <h2 class="product-entry__sub-title text-sm text-gray-500 leading-6 mb-2.5">
+                        {{ product.subtitle }}
+                    </h2>
+                {% endif %}
+
+                {% if product.rating %}
+                    <salla-rating-stars value="{{ product.rating.stars }}"
+                                        reviews="{{ product.rating.count }}"></salla-rating-stars>
+                {% endif %}
+
+                {% if product.is_taxable %}
+                    <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
+                {% endif %}
+
+                {# Description #}
+                {% if product.description %}
+                    <div class="product-description leading-7 text-sm mt-4">
                         {{ product.description|raw }}
                     </div>
-                </div>
-
-                {% if product.has_specifications %}
-                <div class="vf-tab-panel" id="tab-specifications">
-                    <table class="vf-specs-table">
-                        {% for spec in product.specifications %}
-                        <tr>
-                            <td class="vf-specs-table__label">{{ spec.name }}</td>
-                            <td class="vf-specs-table__value">{{ spec.value }}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </div>
                 {% endif %}
 
-                <div class="vf-tab-panel" id="tab-reviews">
-                    <salla-product-rating product-id="{{ product.id }}"></salla-product-rating>
-                    {% include 'components/product/comments.twig' %}
-                </div>
+                {# Size Guide #}
+                {% if product.has_size_guide %}
+                    <salla-button class="mt-2 mb-4" color="gray" size="sm" shape="link"
+                                  onclick="salla.event.dispatch('size-guide::open')">
+                        {{ trans('pages.products.size_guide') }}
+                    </salla-button>
+                {% endif %}
+
+                {# Installment #}
+                <salla-installment price="{{ product.price }}"></salla-installment>
+
+                {% if product.has_metadata %}
+                    <salla-metadata></salla-metadata>
+                {% endif %}
+
+                {# Product Form #}
+                <form class="form product-form" enctype="multipart/form-data" method="post"
+                      onsubmit="return salla.form.onSubmit('cart.addItem', event)">
+                    <input type="hidden" name="id" value="{{ product.id }}">
+
+                    {% hook 'product:single.form.start' %}
+                    {% include 'pages.partials.product.options' %}
+                    {% hook 'product:single.form.end' %}
+
+                    <section class="flex bg-white p-5 sm:pb-0 rounded-md rounded-b-none">
+                        <div class="center-between w-full">
+                            <label class="form-label">
+                                <b class="block">{{ trans('pages.products.price') }}</b>
+                            </label>
+                            <div class="flex whitespace-nowrap price-wrapper gap-4 items-center">
+                              <div class="{{ product.is_on_sale ? '' : 'hidden' }} price_is_on_sale space-x-2 rtl:space-x-reverse">
+                                <h2 class="total-price text-red-800 font-bold text-xl inline-block">{{product.sale_price|money}}</h2>
+                                <span class="before-price text-gray-500 line-through">{{product.regular_price|money}}</span>
+                              </div>
+                              <div class="starting-or-normal-price gap-4 {{ product.is_on_sale ? 'hidden' : 'flex' }}">
+                                {% if product.starting_price %}
+                                  <span class="starting-price-title">{{ trans('pages.products.starting_price') }}</span>
+                                {% endif %}
+                                <h2 class="total-price font-bold text-xl inline-block">{{product.starting_price ? product.starting_price|money : product.price|money }}</h2>
+                              </div>
+                              <div class="out-of-stock min-h-7 leading-7 hidden text-base text-red-600 !opacity-50 font-bold">{{ trans('pages.products.out_of_stock')}}</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="sticky-product-bar bg-white p-5 rounded-md rounded-b-none">
+                        {% if product.is_hidden_quantity or product.type == 'booking' %}
+                            <input type="hidden" value="1" name="quantity" aria-label="Quantity"/>
+                        {% else %}
+                            <div class="sticky-product-bar__quantity center-between mb-5">
+                                <label class="form-label font-bold">{{ trans('pages.products.quantity') }}</label>
+                                <salla-quantity-input max="{{ product.max_quantity }}" value="1" name="quantity"
+                                  class="border-gray-200 flex justify-end"></salla-quantity-input>
+                            </div>
+                        {% endif %}
+
+                        <salla-add-product-button
+                                {{product.can_quick_buy ? 'quick-buy' : ''}}
+                                {{theme.settings.get('sticky_add_to_cart') ? ' support-sticky-bar' : ''}}
+                                {{product.is_require_shipping ? 'required-shipping' : ''}}
+                                amount="{{ product.base_currency_price }}"
+                                class="mt-5 w-full sticky-product-bar__btn"
+                                product-status="{{ product.status }}"
+                                product-type="{{ product.type }}"
+                                product-id="{{ product.id }}"
+                                loader-position="end"
+                                type="submit"
+                                width="wide"
+                                {% if product.notify_availability %}
+                                    {{ product.notify_availability.subscribed ? 'is-subscribed' : '' }}
+                                    channels="{{ product.notify_availability.channels|join(',') }}"
+                                    subscribed-options="{{ product.notify_availability.subscribed_options|json_encode }}"
+                                    {{ product.notify_availability.options ? 'notify-options-availability' : '' }}
+                                {% endif %}>
+                            {{ product.add_to_cart_label }}
+                        </salla-add-product-button>
+                    </section>
+
+                    {% if product.is_giftable %}
+                        <salla-gifting class="mt-5" product-id="{{ product.id }}" {{ product.is_require_shipping ? 'physical-products' : '' }}></salla-gifting>
+                    {% endif %}
+                </form>
+
+                {% hook 'product:single.description.end' %}
+                <salla-quick-order class="mt-5 md:-mb-2 block"></salla-quick-order>
             </div>
         </div>
-
-        {# ==================== RELATED PRODUCTS ==================== #}
-        {% if product.related_products|length > 0 %}
-        <section class="vf-section vf-related-products">
-            <div class="vf-section-header text-center">
-                <span class="vf-section-tag">{{ trans('themes.product.you_may_also_like') }}</span>
-                <h2 class="vf-section-title">{{ trans('themes.product.complete_the_look') }}</h2>
-            </div>
-
-            <div class="vf-products-grid vf-products-grid--4">
-                {% for related in product.related_products|slice(0, 4) %}
-                    {% include 'pages/product/card.twig' with { product: related } %}
-                {% endfor %}
-            </div>
-        </section>
-        {% endif %}
+        <salla-offer></salla-offer>
     </div>
-</div>
 
-{# ==================== SIZE GUIDE MODAL ==================== #}
-{% if theme.settings.show_size_guide %}
-<div class="vf-modal" id="sizeGuideModal">
-    <div class="vf-modal__overlay" onclick="this.parentElement.classList.remove('active')"></div>
-    <div class="vf-modal__content">
-        <div class="vf-modal__header">
-            <h3>{{ trans('themes.product.size_guide') }}</h3>
-            <button onclick="this.closest('.vf-modal').classList.remove('active')" aria-label="Close">
-                <i class="sicon-cancel"></i>
-            </button>
-        </div>
-        <div class="vf-modal__body">
-            <table class="vf-size-table">
-                <thead>
-                    <tr>
-                        <th>{{ trans('themes.product.size') }}</th>
-                        <th>{{ trans('themes.product.chest') }} (cm)</th>
-                        <th>{{ trans('themes.product.waist') }} (cm)</th>
-                        <th>{{ trans('themes.product.hips') }} (cm)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>XS</td><td>78-82</td><td>60-64</td><td>86-90</td></tr>
-                    <tr><td>S</td><td>82-86</td><td>64-68</td><td>90-94</td></tr>
-                    <tr><td>M</td><td>86-90</td><td>68-72</td><td>94-98</td></tr>
-                    <tr><td>L</td><td>90-94</td><td>72-76</td><td>98-102</td></tr>
-                    <tr><td>XL</td><td>94-98</td><td>76-80</td><td>102-106</td></tr>
-                    <tr><td>XXL</td><td>98-102</td><td>80-84</td><td>106-110</td></tr>
-                </tbody>
-            </table>
-            <p class="vf-size-note">{{ trans('themes.product.size_guide_note') }}</p>
-        </div>
+    {% if store.settings.rating.show_on_product %}
+        <salla-comments item-id="{{product.id}}" type="product"></salla-comments>
+    {% endif %}
+
+    <div class="container">
+        <salla-products-slider source="related" source-value="{{product.id}}" block-title="{{trans('pages.products.similar_products')}}" display-all-url></salla-products-slider>
     </div>
-</div>
-{% endif %}
-
-<script>
-// Image gallery
-function changeMainImage(thumb) {
-    const mainImg = document.getElementById('mainProductImage');
-    const newSrc = thumb.getAttribute('data-image');
-    mainImg.src = newSrc;
-    document.querySelectorAll('.vf-product-gallery__thumb').forEach(t => t.classList.remove('active'));
-    thumb.classList.add('active');
-}
-
-// Tabs
-document.querySelectorAll('.vf-tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const tab = btn.dataset.tab;
-        document.querySelectorAll('.vf-tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.vf-tab-panel').forEach(p => p.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('tab-' + tab).classList.add('active');
-    });
-});
-</script>
 {% endblock %}
 
+{% block scripts %}
+    <script defer src="{{ 'product.js' | asset }}"></script>
+    {% if product.has_3d_image %}
+        <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    {% endif %}
+    {% if product.digital_files_settings %}
+        <script type="module" defer src="{{ 'digital-files.js'|asset }}"></script>
+    {% endif %}
+{% endblock %}
