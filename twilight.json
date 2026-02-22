@@ -1,93 +1,71 @@
 {
-  "name": "STYLO",
-  "repository": "https://github.com/baDr-otaiBi/stylo",
-  "support_url": "https://t.me/salladev",
-  "settings": {
-    "version": "1.0.0",
-    "theme_name": "STYLO"
-  },
-  "theme_settings": {
-    "topnav_is_dark": {
-      "type": "checkbox",
-      "label": "Dark Top Navigation",
-      "default": false
+    "name": {
+        "ar": "ستايلو",
+        "en": "STYLO"
     },
-    "hero_overlay_opacity": {
-      "type": "range",
-      "label": "Hero Overlay Opacity",
-      "default": 40,
-      "min": 0,
-      "max": 100
+    "repository": "https://github.com/baDr-otaiBi/stylo",
+    "author_email": "b.alotaibi2005@gmail.com",
+    "support_url": "https://t.me/salladev",
+    "description": {
+        "ar": "ثيم أزياء احترافي لمتاجر سلة",
+        "en": "A luxury fashion theme for Salla stores"
     },
-    "show_collection_grid": {
-      "type": "checkbox",
-      "label": "Show Collection Grid on Home",
-      "default": true
-    },
-    "product_card_style": {
-      "type": "select",
-      "label": "Product Card Style",
-      "options": ["minimal", "overlay", "classic"],
-      "default": "minimal"
-    },
-    "show_size_guide": {
-      "type": "checkbox",
-      "label": "Show Size Guide on Product Page",
-      "default": true
-    }
-  },
-  "features": [
-    "component-featured-products",
-    "component-fixed-banner",
-    "component-products-slider",
-    "component-photos-slider",
-    "component-parallax-background",
-    "component-testimonials",
-    "component-square-photos",
-    "component-store-features"
-  ],
-  "components": [
-    {
-      "name": "collection-grid",
-      "title": "Collection Grid",
-      "icon": "sicon-grid",
-      "path": "home.collection-grid"
-    },
-    {
-      "name": "trending-products",
-      "title": "Trending Products",
-      "icon": "sicon-fire",
-      "path": "home.trending-products"
-    },
-    {
-      "name": "lookbook",
-      "title": "Lookbook Gallery",
-      "icon": "sicon-camera",
-      "path": "home.lookbook"
-    },
-    {
-      "name": "instagram-feed",
-      "title": "Instagram Feed",
-      "icon": "sicon-instagram",
-      "path": "home.instagram-feed"
-    },
-    {
-      "name": "newsletter-fashion",
-      "title": "Fashion Newsletter",
-      "icon": "sicon-mail",
-      "path": "home.newsletter-fashion"
-    },
-    {
-      "name": "brands-showcase",
-      "title": "Brands Showcase",
-      "icon": "sicon-star",
-      "path": "home.brands-showcase"
-    },
-    {
-      "name": "size-guide",
-      "title": "Size Guide Modal",
-      "icon": "sicon-ruler",
-      "path": "product.size-guide"
-    }
-  ]
+    "features": [
+        "mega-menu",
+        "fonts",
+        "color",
+        "breadcrumb",
+        "unite-cards-height",
+        "component-featured-products",
+        "component-fixed-banner",
+        "component-fixed-products",
+        "component-products-slider",
+        "component-photos-slider",
+        "component-parallax-background",
+        "component-testimonials",
+        "component-square-photos",
+        "component-store-features",
+        "component-youtube",
+        "menu-images",
+        "filters"
+    ],
+    "settings": [],
+    "components": [
+        {
+            "name": "collection-grid",
+            "title": "Collection Grid",
+            "icon": "sicon-grid",
+            "path": "home.collection-grid"
+        },
+        {
+            "name": "trending-products",
+            "title": "Trending Products",
+            "icon": "sicon-fire",
+            "path": "home.trending-products"
+        },
+        {
+            "name": "lookbook",
+            "title": "Lookbook Gallery",
+            "icon": "sicon-camera",
+            "path": "home.lookbook"
+        },
+        {
+            "name": "newsletter-fashion",
+            "title": "Fashion Newsletter",
+            "icon": "sicon-mail",
+            "path": "home.newsletter-fashion"
+        },
+        {
+            "name": "brands-showcase",
+            "title": "Brands Showcase",
+            "icon": "sicon-star",
+            "path": "home.brands-showcase"
+        },
+        {
+            "name": "size-guide",
+            "title": "Size Guide Modal",
+            "icon": "sicon-ruler",
+            "path": "product.size-guide"
+        }
+    ]
 }
