@@ -1,14 +1,193 @@
 {#
-| Variable         | Type       | Description                                                         |
-|------------------|------------|---------------------------------------------------------------------|
-| page             | object     |                                                                     |
-| page.title       | string     | *could be html                                                      |
-| page.slug        | string     | ex: "cat.show"                                                      |
+  Vogue Fashion Theme - Home Page
+  Fashion-forward landing page layout
 #}
-{% extends "layouts.master" %}
+
+{% extends "layouts/master.twig" %}
+
 {% block content %}
-    {% component home %}
-{% endblock %}
-{% block scripts %}
-    <script defer src="{{ 'home.js' | asset }}"></script>
+
+{# ==================== HERO SECTION ==================== #}
+<section class="vf-hero">
+    <div class="vf-hero__slider swiper" id="heroSlider">
+        <div class="swiper-wrapper">
+            {% for slide in store.slider %}
+            <div class="swiper-slide">
+                <div class="vf-hero__slide">
+                    <div class="vf-hero__image">
+                        <img src="{{ slide.image }}" alt="{{ slide.title }}" loading="{{ loop.first ? 'eager' : 'lazy' }}">
+                        <div class="vf-hero__overlay" style="opacity: {{ theme.settings.hero_overlay_opacity | default(40) / 100 }}"></div>
+                    </div>
+                    <div class="vf-hero__content">
+                        <div class="vf-container">
+                            <div class="vf-hero__text">
+                                {% if slide.subtitle %}
+                                    <span class="vf-hero__subtitle">{{ slide.subtitle }}</span>
+                                {% endif %}
+                                <h1 class="vf-hero__title">{{ slide.title }}</h1>
+                                {% if slide.description %}
+                                    <p class="vf-hero__desc">{{ slide.description }}</p>
+                                {% endif %}
+                                {% if slide.url %}
+                                    <a href="{{ slide.url }}" class="vf-btn vf-btn--hero">
+                                        {{ trans('themes.home.shop_now') }}
+                                        <i class="sicon-keyboard_arrow_left rtl:hidden"></i>
+                                        <i class="sicon-keyboard_arrow_right ltr:hidden"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="vf-hero__pagination swiper-pagination"></div>
+        <div class="vf-hero__nav">
+            <button class="vf-hero__prev"><i class="sicon-keyboard_arrow_left"></i></button>
+            <button class="vf-hero__next"><i class="sicon-keyboard_arrow_right"></i></button>
+        </div>
+    </div>
+</section>
+
+{# ==================== COLLECTION GRID ==================== #}
+{% if theme.settings.show_collection_grid %}
+<section class="vf-section vf-collections">
+    <div class="vf-container">
+        <div class="vf-section-header text-center">
+            <span class="vf-section-tag">{{ trans('themes.home.explore') }}</span>
+            <h2 class="vf-section-title">{{ trans('themes.home.shop_by_category') }}</h2>
+        </div>
+
+        <div class="vf-collection-grid">
+            {% for category in store.categories|slice(0, 4) %}
+            <a href="{{ category.url }}" class="vf-collection-card group"
+               {% if loop.index <= 2 %}style="grid-row: span 2;"{% endif %}>
+                <div class="vf-collection-card__image">
+                    {% if category.image %}
+                        <img src="{{ category.image }}" alt="{{ category.name }}" loading="lazy">
+                    {% endif %}
+                    <div class="vf-collection-card__overlay"></div>
+                </div>
+                <div class="vf-collection-card__content">
+                    <h3 class="vf-collection-card__title">{{ category.name }}</h3>
+                    <span class="vf-collection-card__count">
+                        {{ category.products_count }} {{ trans('themes.home.products') }}
+                    </span>
+                    <span class="vf-collection-card__arrow">
+                        <i class="sicon-keyboard_arrow_left rtl:block ltr:hidden"></i>
+                        <i class="sicon-keyboard_arrow_right ltr:block rtl:hidden"></i>
+                    </span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{# ==================== TWILIGHT FEATURES (Pre-defined components) ==================== #}
+{% component 'home' %}
+
+{# ==================== TRENDING PRODUCTS ==================== #}
+{% if theme.settings.show_trending_badge %}
+<section class="vf-section vf-trending">
+    <div class="vf-container">
+        <div class="vf-section-header">
+            <div>
+                <span class="vf-section-tag">{{ trans('themes.home.trending_now') }}</span>
+                <h2 class="vf-section-title">{{ trans('themes.home.most_wanted') }}</h2>
+            </div>
+            <a href="{{ link('products') }}" class="vf-link-arrow">
+                {{ trans('themes.home.view_all') }}
+                <i class="sicon-keyboard_arrow_left rtl:block ltr:hidden"></i>
+                <i class="sicon-keyboard_arrow_right ltr:block rtl:hidden"></i>
+            </a>
+        </div>
+
+        <div class="vf-products-grid">
+            {% for product in store.products|slice(0, 8) %}
+                {% include 'pages/product/card.twig' with { product: product } %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{# ==================== LOOKBOOK / SPLIT BANNER ==================== #}
+<section class="vf-section vf-lookbook">
+    <div class="vf-container">
+        <div class="vf-lookbook-grid">
+            <div class="vf-lookbook-item vf-lookbook-item--large">
+                <div class="vf-lookbook-item__image">
+                    {% if store.slider[0] %}
+                        <img src="{{ store.slider[0].image }}" alt="Lookbook" loading="lazy">
+                    {% endif %}
+                    <div class="vf-lookbook-item__overlay"></div>
+                </div>
+                <div class="vf-lookbook-item__content">
+                    <span class="vf-lookbook-item__tag">{{ trans('themes.home.new_collection') }}</span>
+                    <h3 class="vf-lookbook-item__title">{{ trans('themes.home.lookbook_title') }}</h3>
+                    <a href="{{ link('products') }}" class="vf-btn vf-btn--outline-white">
+                        {{ trans('themes.home.discover') }}
+                    </a>
+                </div>
+            </div>
+            <div class="vf-lookbook-item vf-lookbook-item--small">
+                <div class="vf-lookbook-item__image">
+                    {% if store.slider[1] %}
+                        <img src="{{ store.slider[1].image }}" alt="Lookbook" loading="lazy">
+                    {% endif %}
+                    <div class="vf-lookbook-item__overlay"></div>
+                </div>
+                <div class="vf-lookbook-item__content">
+                    <span class="vf-lookbook-item__tag">{{ trans('themes.home.sale') }}</span>
+                    <h3 class="vf-lookbook-item__title">{{ trans('themes.home.seasonal_sale') }}</h3>
+                    <a href="{{ link('products') }}" class="vf-btn vf-btn--outline-white">
+                        {{ trans('themes.home.shop_sale') }}
+                    </a>
+                </div>
+            </div>
+            <div class="vf-lookbook-item vf-lookbook-item--small">
+                <div class="vf-lookbook-item__image">
+                    {% if store.slider[2] %}
+                        <img src="{{ store.slider[2].image }}" alt="Lookbook" loading="lazy">
+                    {% endif %}
+                    <div class="vf-lookbook-item__overlay"></div>
+                </div>
+                <div class="vf-lookbook-item__content">
+                    <span class="vf-lookbook-item__tag">{{ trans('themes.home.exclusive') }}</span>
+                    <h3 class="vf-lookbook-item__title">{{ trans('themes.home.limited_edition') }}</h3>
+                    <a href="{{ link('products') }}" class="vf-btn vf-btn--outline-white">
+                        {{ trans('themes.home.explore') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ==================== NEWSLETTER SECTION ==================== #}
+<section class="vf-section vf-newsletter vf-newsletter--{{ theme.settings.newsletter_style | default('split') }}">
+    <div class="vf-container">
+        <div class="vf-newsletter__inner">
+            <div class="vf-newsletter__content">
+                <span class="vf-section-tag">{{ trans('themes.home.stay_in_touch') }}</span>
+                <h2 class="vf-newsletter__title">{{ trans('themes.home.newsletter_title') }}</h2>
+                <p class="vf-newsletter__desc">{{ trans('themes.home.newsletter_desc') }}</p>
+            </div>
+            <div class="vf-newsletter__form">
+                <salla-newsletter-subscription>
+                    <div class="vf-newsletter__input-group">
+                        <input type="email" placeholder="{{ trans('themes.home.email_placeholder') }}" class="vf-newsletter__input">
+                        <button type="submit" class="vf-btn vf-btn--primary">
+                            {{ trans('themes.home.subscribe') }}
+                        </button>
+                    </div>
+                </salla-newsletter-subscription>
+            </div>
+        </div>
+    </div>
+</section>
+
 {% endblock %}
