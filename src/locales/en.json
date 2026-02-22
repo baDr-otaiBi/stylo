@@ -1,27 +1,86 @@
 {
-  "blocks": {
+  "themes": {
+    "common": {
+      "home": "Home",
+      "products": "Products",
+      "categories": "Categories",
+      "search": "Search",
+      "close": "Close",
+      "loading": "Loading..."
+    },
     "header": {
-      "cart": "Cart"
+      "menu": "Menu",
+      "my_account": "My Account",
+      "wishlist": "Wishlist",
+      "cart": "Cart",
+      "search": "Search products...",
+      "free_shipping_note": "Free shipping on orders over SAR 200"
     },
-    "appBanner": {
-      "download_now": "download now"
-    }
-  },
-  "pages": {
-    "cart": {
-      "cart_options": "Cart Options"
+    "home": {
+      "shop_now": "Shop Now",
+      "explore": "Explore",
+      "shop_by_category": "Shop by Category",
+      "products": "products",
+      "trending_now": "Trending Now",
+      "most_wanted": "Most Wanted",
+      "view_all": "View All",
+      "new_collection": "New Collection",
+      "lookbook_title": "Latest Looks",
+      "discover": "Discover",
+      "sale": "Sale",
+      "seasonal_sale": "Seasonal Sale",
+      "shop_sale": "Shop Sale",
+      "exclusive": "Exclusive",
+      "limited_edition": "Limited Edition",
+      "stay_in_touch": "Stay in Touch",
+      "newsletter_title": "Subscribe to Our Newsletter",
+      "newsletter_desc": "Be the first to know about new collections and exclusive offers",
+      "email_placeholder": "Enter your email",
+      "subscribe": "Subscribe"
     },
-    "order": {
-      "can_edit_or_delete_your_review_within": "You can edit or delete your review within",
-      "edit_period_ended": "The period to edit the review has ended",
-      "delete_period_ended": "The period to delete the review has ended",
-      "days_since_added": "days since it was added",
-      "option_name": "Option name",
-      "option_content": "Content"
+    "product": {
+      "add_to_cart": "Add to Cart",
+      "buy_now": "Buy Now",
+      "add_to_wishlist": "Add to Wishlist",
+      "share": "Share",
+      "description": "Description",
+      "specifications": "Specifications",
+      "reviews": "Reviews",
+      "you_save": "You Save",
+      "tax_included": "Tax included",
+      "sku": "SKU",
+      "category": "Category",
+      "tags": "Tags",
+      "off": "Off",
+      "new": "New",
+      "limited": "Limited",
+      "sold_out": "Sold Out",
+      "size_guide": "Size Guide",
+      "size": "Size",
+      "chest": "Chest",
+      "waist": "Waist",
+      "hips": "Hips",
+      "size_guide_note": "Measurements are approximate and may vary by product. For best fit, take your personal measurements.",
+      "you_may_also_like": "You May Also Like",
+      "complete_the_look": "Complete the Look",
+      "fast_shipping": "Fast Shipping",
+      "easy_returns": "Easy Returns",
+      "secure_payment": "Secure Payment"
+    },
+    "footer": {
+      "quick_links": "Quick Links",
+      "all_products": "All Products",
+      "brands": "Brands",
+      "blog": "Blog",
+      "customer_service": "Customer Service",
+      "my_account": "My Account",
+      "track_order": "Track Order",
+      "wishlist": "Wishlist",
+      "get_in_touch": "Get in Touch",
+      "we_accept": "We Accept",
+      "all_rights_reserved": "All Rights Reserved",
+      "powered_by": "Powered by"
     }
-  },
-  "common": {
-    "bank_offer_sub_title_multiple": "Pay for your purchases via one of the following bank cards and get the specified discount",
-    "bank_offer_sub_title_single": "Pay for your purchases via :bank_name bank card and get discount"
   }
 }
+

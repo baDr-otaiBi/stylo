@@ -1,304 +1,265 @@
-import MobileMenu from 'mmenu-light';
-import Swal from 'sweetalert2';
-import Anime from './partials/anime';
-import initTootTip from './partials/tooltip';
-import AppHelpers from "./app-helpers";
+/**
+ * STYLO Theme - Main JavaScript
+ * Built for Salla Twilight Engine
+ */
 
-class App extends AppHelpers {
-  constructor() {
-    super();
-    window.app = this;
-  }
+document.addEventListener('DOMContentLoaded', () => {
 
-  loadTheApp() {
-    this.commonThings();
-    this.initiateNotifier();
-    this.initiateMobileMenu();
-    if (header_is_sticky) {
-      this.initiateStickyMenu();
-    }
-    this.initAddToCart();
-    this.initiateDropdowns();
-    this.initiateModals();
-    this.initiateCollapse();
-    this.initAttachWishlistListeners();
-    
-    // Ensure #more-menu-dropdown exists before running changeMenuDirection
-    const menuDirInterval = setInterval(() => {
-      if (document.querySelector('#more-menu-dropdown')) {
-        this.changeMenuDirection();
-        clearInterval(menuDirInterval);
-      }
-    }, 100);
-
-    initTootTip();
-    this.loadModalImgOnclick();
-
-    salla.comment.event.onAdded(() => window.location.reload());
-
-    this.status = 'ready';
-    document.dispatchEvent(new CustomEvent('theme::ready'));
-    this.log('Theme Loaded 🎉');
-  }
-
-  log(message) {
-    salla.log(`ThemeApp(Raed)::${message}`);
-    return this;
-  }
-
-    changeMenuDirection() {
-      setTimeout(() => {
-        app.all('.root-level.has-children', item => {
-          if (item.classList.contains('change-menu-dir')) return;
-          app.on('mouseover', item, () => {
-            let allSubMenus = item.querySelectorAll('.sub-menu');
-            allSubMenus.forEach((submenu, idx) => {
-              if (idx === 0) return;
-              let rect = submenu.getBoundingClientRect();
-              if (rect.left < 10 || rect.right > window.innerWidth - 10) {
-                app.addClass(item, 'change-menu-dir');
-              }
+    // ==========================================
+    // LAZY LOADING IMAGES
+    // ==========================================
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                    }
+                    imageObserver.unobserve(img);
+                }
             });
-          });
+        }, { rootMargin: '100px' });
+
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
         });
-      }, 1000);
     }
 
-  loadModalImgOnclick(){
-    document.querySelectorAll('.load-img-onclick').forEach(link => {
-      link.addEventListener('click', (event) => {
-        event.preventDefault();
-        let modal = document.querySelector('#' + link.dataset.modalId),
-          img = modal.querySelector('img'),
-          imgSrc = img.dataset.src;
-        modal.open();
-
-        if (img.classList.contains('loaded')) return;
-
-        img.src = imgSrc;
-        img.classList.add('loaded');
-      })
-    })
-  }
-
-  commonThings() {
-    this.cleanContentArticles('.content-entry');
-  }
-
-  cleanContentArticles(elementsSelector) {
-    let articleElements = document.querySelectorAll(elementsSelector);
-
-    if (articleElements.length) {
-      articleElements.forEach(article => {
-        article.innerHTML = article.innerHTML.replace(/\&nbsp;/g, ' ')
-      })
-    }
-  }
-
-isElementLoaded(selector){
-  return new Promise((resolve=>{
-    const interval=setInterval(()=>{
-    if(document.querySelector(selector)){
-      clearInterval(interval)
-      return resolve(document.querySelector(selector))
-    }
-   },160)
-}))
-
-  
-  };
-
-  copyToClipboard(event) {
-    event.preventDefault();
-    let aux = document.createElement("input"),
-    btn = event.currentTarget;
-    aux.setAttribute("value", btn.dataset.content);
-    document.body.appendChild(aux);
-    aux.select();
-    document.execCommand("copy");
-    document.body.removeChild(aux);
-    this.toggleElementClassIf(btn, 'copied', 'code-to-copy', () => true);
-    setTimeout(() => {
-      this.toggleElementClassIf(btn, 'code-to-copy', 'copied', () => true)
-    }, 1000);
-  }
-
-  initiateNotifier() {
-    salla.notify.setNotifier(function (message, type, data) {
-      if (window.enable_add_product_toast && data?.data?.googleTags?.event === "addToCart") {
-        return;
-      }
-      if (typeof message == 'object') {
-        return Swal.fire(message).then(type);
-      }
-
-      return Swal.mixin({
-        toast: true,
-        position: salla.config.get('theme.is_rtl') ? 'top-start' : 'top-end',
-        showConfirmButton: false,
-        timer: 2000,
-        didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-      }).fire({
-        icon: type,
-        title: message,
-        showCloseButton: true,
-        timerProgressBar: true
-      })
-    });
-  }
-
-
-  initiateMobileMenu() {
-
-  this.isElementLoaded('#mobile-menu').then((menu) => {
-
- 
-  const mobileMenu = new MobileMenu(menu, "(max-width: 1024px)", "( slidingSubmenus: false)");
-
-  salla.lang.onLoaded(() => {
-    mobileMenu.navigation({ title: salla.lang.get('blocks.header.main_menu') });
-  });
-  const drawer = mobileMenu.offcanvas({ position: salla.config.get('theme.is_rtl') ? "right" : 'left' });
-
-  this.onClick("a[href='#mobile-menu']", event => {
-    document.body.classList.add('menu-opened');
-    event.preventDefault() || drawer.close() || drawer.open()
-    
-  });
-  this.onClick(".close-mobile-menu", event => {
-    document.body.classList.remove('menu-opened');
-    event.preventDefault() || drawer.close()
-  });
-  });
-
-  }
- initAttachWishlistListeners() {
-    let isListenerAttached = false;
-  
-    function toggleFavoriteIcon(id, isAdded = true) {
-      document.querySelectorAll('.s-product-card-wishlist-btn[data-id="' + id + '"]').forEach(btn => {
-        app.toggleElementClassIf(btn, 's-product-card-wishlist-added', 'not-added', () => isAdded);
-        app.toggleElementClassIf(btn, 'pulse-anime', 'un-favorited', () => isAdded);
-      });
-    }
-  
-    if (!isListenerAttached) {
-      salla.wishlist.event.onAdded((event, id) => toggleFavoriteIcon(id));
-      salla.wishlist.event.onRemoved((event, id) => toggleFavoriteIcon(id, false));
-      isListenerAttached = true; // Mark the listener as attached
-    }
-  }
-
-  initiateStickyMenu() {
-    let header = this.element('#mainnav'),
-      height = this.element('#mainnav .inner')?.clientHeight;
-    //when it's landing page, there is no header
-    if (!header) {
-      return;
-    }
-
-    window.addEventListener('load', () => setTimeout(() => this.setHeaderHeight(), 500))
-    window.addEventListener('resize', () => this.setHeaderHeight())
-
-    window.addEventListener('scroll', () => {
-      window.scrollY >= header.offsetTop + height ? header.classList.add('fixed-pinned', 'animated') : header.classList.remove('fixed-pinned');
-      window.scrollY >= 200 ? header.classList.add('fixed-header') : header.classList.remove('fixed-header', 'animated');
-    }, { passive: true });
-  }
-
-  setHeaderHeight() {
-    let height = this.element('#mainnav .inner').clientHeight,
-      header = this.element('#mainnav');
-    header.style.height = height + 'px';
-  }
-
-  initiateDropdowns() {
-    this.onClick('.dropdown__trigger', ({ target: btn }) => {
-      btn.parentElement.classList.toggle('is-opened');
-      document.body.classList.toggle('dropdown--is-opened');
-      // Click Outside || Click on close btn
-      window.addEventListener('click', ({ target: element }) => {
-        if (!element.closest('.dropdown__menu') && element !== btn || element.classList.contains('dropdown__close')) {
-          btn.parentElement.classList.remove('is-opened');
-          document.body.classList.remove('dropdown--is-opened');
-        }
-      });
-    });
-  }
-
-  initiateModals() {
-    this.onClick('[data-modal-trigger]', e => {
-      let id = '#' + e.target.dataset.modalTrigger;
-      this.removeClass(id, 'hidden');
-      setTimeout(() => this.toggleModal(id, true)); //small amont of time to running toggle After adding hidden
-    });
-    salla.event.document.onClick("[data-close-modal]", e => this.toggleModal('#' + e.target.dataset.closeModal, false));
-  }
-
-  toggleModal(id, isOpen) {
-    this.toggleClassIf(`${id} .s-salla-modal-overlay`, 'ease-out duration-300 opacity-100', 'opacity-0', () => isOpen)
-      .toggleClassIf(`${id} .s-salla-modal-body`,
-        'ease-out duration-300 opacity-100 translate-y-0 sm:scale-100', //add these classes
-        'opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95', //remove these classes
-        () => isOpen)
-      .toggleElementClassIf(document.body, 'modal-is-open', 'modal-is-closed', () => isOpen);
-    if (!isOpen) {
-      setTimeout(() => this.addClass(id, 'hidden'), 350);
-    }
-  }
-
-  initiateCollapse() {
-    document.querySelectorAll('.btn--collapse')
-      .forEach((trigger) => {
-        const content = document.querySelector('#' + trigger.dataset.show);
-        if (!content) return;
-
-        const state = { isOpen: false }
-
-        const toggleState = (isOpen) => {
-          state.isOpen = !isOpen;
-          this.toggleElementClassIf([content, trigger], 'is-closed', 'is-opened', () => isOpen);
-        }
-
-        trigger.addEventListener('click', () => {
-          const { isOpen } = state;
-          toggleState(isOpen);
+    // ==========================================
+    // SCROLL ANIMATIONS (Fade In on Scroll)
+    // ==========================================
+    const animateOnScroll = () => {
+        const elements = document.querySelectorAll('.vf-section, .vf-product-card, .vf-collection-card, .vf-lookbook-item');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('vf-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
         });
-      });
-  }
 
+        elements.forEach(el => {
+            el.classList.add('vf-animate');
+            observer.observe(el);
+        });
+    };
 
-  /**
-   * Workaround for seeking to simplify & clean, There are three ways to use this method:
-   * 1- direct call: `this.anime('.my-selector')` - will use default values
-   * 2- direct call with overriding defaults: `this.anime('.my-selector', {duration:3000})`
-   * 3- return object to play it letter: `this.anime('.my-selector', false).duration(3000).play()` - will not play animation unless calling play method.
-   * @param {string|HTMLElement} selector
-   * @param {object|undefined|null|null} options - in case there is need to set attributes one by one set it `false`;
-   * @return {Anime|*}
-   */
-  anime(selector, options = null) {
-    let anime = new Anime(selector, options);
-    return options === false ? anime : anime.play();
-  }
+    animateOnScroll();
 
-  /**
-   * These actions are responsible for pressing "add to cart" button,
-   * they can be from any page, especially when mega-menu is enabled
-   */
-  initAddToCart() {
-    salla.cart.event.onUpdated(summary => {
-      document.querySelectorAll('[data-cart-total]').forEach(el => el.innerHTML = salla.money(summary.total));
-      document.querySelectorAll('[data-cart-count]').forEach(el => el.innerText = salla.helpers.number(summary.count));
+    // ==========================================
+    // HERO SLIDER (Using Swiper if available)
+    // ==========================================
+    const initHeroSlider = () => {
+        const heroSlider = document.getElementById('heroSlider');
+        if (!heroSlider) return;
+
+        if (typeof Swiper !== 'undefined') {
+            new Swiper('#heroSlider', {
+                loop: true,
+                speed: 800,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                effect: 'fade',
+                fadeEffect: {
+                    crossFade: true
+                },
+                pagination: {
+                    el: '.vf-hero__pagination',
+                    clickable: true,
+                    bulletClass: 'vf-hero__bullet',
+                    bulletActiveClass: 'vf-hero__bullet--active',
+                },
+                navigation: {
+                    nextEl: '.vf-hero__next',
+                    prevEl: '.vf-hero__prev',
+                },
+            });
+        }
+    };
+
+    initHeroSlider();
+
+    // ==========================================
+    // PRODUCT QUICK VIEW
+    // ==========================================
+    document.querySelectorAll('.vf-quick-view-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const productId = btn.dataset.productId;
+            if (productId && typeof salla !== 'undefined') {
+                salla.event.dispatch('salla-quick-view::open', { id: productId });
+            }
+        });
     });
 
-    salla.cart.event.onItemAdded((response, prodId) => {
-      app.element('salla-cart-summary').animateToCart(app.element(`#product-${prodId} img`));
+    // ==========================================
+    // SMOOTH SCROLL FOR ANCHOR LINKS
+    // ==========================================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
     });
-  }
-}
 
-salla.onReady(() => (new App).loadTheApp());
+    // ==========================================
+    // CART COUNT UPDATE LISTENER
+    // ==========================================
+    if (typeof salla !== 'undefined') {
+        salla.event.on('salla::cart.updated', (data) => {
+            const cartCount = document.getElementById('cartCount');
+            if (cartCount && data.count !== undefined) {
+                cartCount.textContent = data.count;
+                // Animate cart icon
+                cartCount.closest('.vf-cart-btn')?.classList.add('vf-cart-bounce');
+                setTimeout(() => {
+                    cartCount.closest('.vf-cart-btn')?.classList.remove('vf-cart-bounce');
+                }, 600);
+            }
+        });
+
+        // Add to cart success notification
+        salla.event.on('salla::cart.item.added', () => {
+            showNotification('success');
+        });
+    }
+
+    // ==========================================
+    // NOTIFICATION TOAST
+    // ==========================================
+    function showNotification(type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `vf-toast vf-toast--${type}`;
+        
+        const messages = {
+            success: document.documentElement.lang === 'ar' 
+                ? 'تمت الإضافة بنجاح!' 
+                : 'Added successfully!',
+            error: document.documentElement.lang === 'ar' 
+                ? 'حدث خطأ!' 
+                : 'An error occurred!'
+        };
+
+        toast.innerHTML = `
+            <i class="sicon-${type === 'success' ? 'check-circle' : 'warning'}"></i>
+            <span>${messages[type]}</span>
+        `;
+
+        document.body.appendChild(toast);
+        
+        requestAnimationFrame(() => {
+            toast.classList.add('vf-toast--visible');
+        });
+
+        setTimeout(() => {
+            toast.classList.remove('vf-toast--visible');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // ==========================================
+    // IMAGE ZOOM ON PRODUCT PAGE
+    // ==========================================
+    const productMainImage = document.getElementById('productMainImage');
+    if (productMainImage) {
+        const img = productMainImage.querySelector('.vf-product-gallery__img');
+        
+        productMainImage.addEventListener('mousemove', (e) => {
+            const rect = productMainImage.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            img.style.transformOrigin = `${x}% ${y}%`;
+            img.style.transform = 'scale(1.5)';
+        });
+
+        productMainImage.addEventListener('mouseleave', () => {
+            img.style.transform = 'scale(1)';
+        });
+    }
+
+    // ==========================================
+    // PRODUCTS GRID ANIMATION (staggered)
+    // ==========================================
+    const staggerProducts = () => {
+        const grids = document.querySelectorAll('.vf-products-grid');
+        grids.forEach(grid => {
+            const cards = grid.querySelectorAll('.vf-product-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.08}s`;
+            });
+        });
+    };
+
+    staggerProducts();
+
+});
+
+// ==========================================
+// CSS ANIMATIONS (injected)
+// ==========================================
+const styleSheet = document.createElement('style');
+styleSheet.textContent = `
+    /* Scroll Animations */
+    .vf-animate {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .vf-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Cart Bounce */
+    @keyframes cartBounce {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+    }
+
+    .vf-cart-bounce .vf-cart-count {
+        animation: cartBounce 0.6s ease;
+    }
+
+    /* Toast Notification */
+    .vf-toast {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: #1a1a1a;
+        color: #fff;
+        padding: 0.875rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        font-size: 0.875rem;
+        z-index: 9999;
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .vf-toast--visible {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .vf-toast--success i { color: #4CAF50; }
+    .vf-toast--error i { color: #E53935; }
+`;
+document.head.appendChild(styleSheet);
+

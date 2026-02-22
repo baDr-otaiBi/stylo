@@ -1,27 +1,86 @@
 {
-  "blocks": {
+  "themes": {
+    "common": {
+      "home": "الرئيسية",
+      "products": "المنتجات",
+      "categories": "الأقسام",
+      "search": "بحث",
+      "close": "إغلاق",
+      "loading": "جاري التحميل..."
+    },
     "header": {
-      "cart": "السلة"
+      "menu": "القائمة",
+      "my_account": "حسابي",
+      "wishlist": "المفضلة",
+      "cart": "سلة المشتريات",
+      "search": "ابحث عن منتجات...",
+      "free_shipping_note": "شحن مجاني للطلبات فوق 200 ريال"
     },
-    "appBanner": {
-      "download_now": "حمله الان"
-    }
-  },
-  "pages": {
-    "cart": {
-      "cart_options": "خيارات السلة"
+    "home": {
+      "shop_now": "تسوّق الآن",
+      "explore": "استكشف",
+      "shop_by_category": "تسوّق حسب القسم",
+      "products": "منتج",
+      "trending_now": "الأكثر رواجاً",
+      "most_wanted": "الأكثر طلباً",
+      "view_all": "عرض الكل",
+      "new_collection": "مجموعة جديدة",
+      "lookbook_title": "أحدث الإطلالات",
+      "discover": "اكتشف",
+      "sale": "تخفيضات",
+      "seasonal_sale": "تخفيضات الموسم",
+      "shop_sale": "تسوّق التخفيضات",
+      "exclusive": "حصري",
+      "limited_edition": "إصدار محدود",
+      "stay_in_touch": "ابقَ على تواصل",
+      "newsletter_title": "اشترك في نشرتنا البريدية",
+      "newsletter_desc": "كن أول من يعرف عن أحدث المجموعات والعروض الحصرية",
+      "email_placeholder": "أدخل بريدك الإلكتروني",
+      "subscribe": "اشترك"
     },
-    "order": {
-      "can_edit_or_delete_your_review_within": "يمكنك تعديل أو حذف تقييمك خلال",
-      "edit_period_ended": "تم انتهاء المدة المحددة لتعديل التقييم",
-      "delete_period_ended": "تم انتهاء المدة المحددة لحذف التقييم",
-      "days_since_added": "أيام من إضافته",
-      "option_name": "الخيار",
-      "option_content": "المحتوى"
+    "product": {
+      "add_to_cart": "أضف للسلة",
+      "buy_now": "اشترِ الآن",
+      "add_to_wishlist": "أضف للمفضلة",
+      "share": "مشاركة",
+      "description": "الوصف",
+      "specifications": "المواصفات",
+      "reviews": "التقييمات",
+      "you_save": "وفّرت",
+      "tax_included": "شامل الضريبة",
+      "sku": "رقم المنتج",
+      "category": "القسم",
+      "tags": "الوسوم",
+      "off": "خصم",
+      "new": "جديد",
+      "limited": "محدود",
+      "sold_out": "نفذت الكمية",
+      "size_guide": "جدول المقاسات",
+      "size": "المقاس",
+      "chest": "الصدر",
+      "waist": "الخصر",
+      "hips": "الأرداف",
+      "size_guide_note": "القياسات تقريبية وقد تختلف حسب المنتج. للحصول على أفضل مقاس، يُنصح بأخذ القياسات الشخصية.",
+      "you_may_also_like": "قد يعجبك أيضاً",
+      "complete_the_look": "أكمل إطلالتك",
+      "fast_shipping": "شحن سريع",
+      "easy_returns": "إرجاع سهل",
+      "secure_payment": "دفع آمن"
+    },
+    "footer": {
+      "quick_links": "روابط سريعة",
+      "all_products": "جميع المنتجات",
+      "brands": "الماركات",
+      "blog": "المدوّنة",
+      "customer_service": "خدمة العملاء",
+      "my_account": "حسابي",
+      "track_order": "تتبّع طلبك",
+      "wishlist": "المفضلة",
+      "get_in_touch": "تواصل معنا",
+      "we_accept": "نقبل الدفع بـ",
+      "all_rights_reserved": "جميع الحقوق محفوظة",
+      "powered_by": "مدعوم بواسطة"
     }
-  },
-  "common": {
-    "bank_offer_sub_title_multiple": "ادفع قيمة مشترياتك عبر أحد البطاقات البنكة التالية واحصل على الخصم المحدد",
-    "bank_offer_sub_title_single": "ادفع قيمة مشترياتك عبر أحد بطاقات بنك :bank_name واحصل على خصم بنسبة "
   }
 }
+
