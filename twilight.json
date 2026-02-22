@@ -148,7 +148,8 @@
         "breadcrumb",
         "unite-cards-height",
         "component-fixed-products",
-        "component-random-testimonials"
+        "component-random-testimonials",
+        "component-youtube"
     ],
     "components": [
         {
