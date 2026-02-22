@@ -1,3 +1,4 @@
+import "../styles/app.scss";
 /**
  * STYLO Theme - Main JavaScript
  * Built for Salla Twilight Engine
