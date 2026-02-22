@@ -1,0 +1,121 @@
+{#
+  Vogue Fashion Theme - Product Card
+  Minimal, elegant product card for fashion items
+#}
+
+<div class="vf-product-card group" data-product-id="{{ product.id }}">
+    {# Product Image #}
+    <div class="vf-product-card__image-wrapper">
+        <a href="{{ product.url }}" class="vf-product-card__image-link">
+            <img src="{{ product.image.url }}"
+                 alt="{{ product.image.alt | default(product.name) }}"
+                 class="vf-product-card__image vf-product-card__image--primary"
+                 loading="lazy">
+
+            {# Second image on hover (if available) #}
+            {% if product.images|length > 1 %}
+                <img src="{{ product.images[1].url }}"
+                     alt="{{ product.name }}"
+                     class="vf-product-card__image vf-product-card__image--hover"
+                     loading="lazy">
+            {% endif %}
+        </a>
+
+        {# Badges #}
+        <div class="vf-product-card__badges">
+            {% if product.is_on_sale %}
+                <span class="vf-badge vf-badge--sale">
+                    {{ product.discount_percentage }}% {{ trans('themes.product.off') }}
+                </span>
+            {% endif %}
+
+            {% if product.is_new %}
+                <span class="vf-badge vf-badge--new">
+                    {{ trans('themes.product.new') }}
+                </span>
+            {% endif %}
+
+            {% if product.quantity <= 5 and product.quantity > 0 %}
+                <span class="vf-badge vf-badge--limited">
+                    {{ trans('themes.product.limited') }}
+                </span>
+            {% endif %}
+
+            {% if product.quantity == 0 %}
+                <span class="vf-badge vf-badge--soldout">
+                    {{ trans('themes.product.sold_out') }}
+                </span>
+            {% endif %}
+        </div>
+
+        {# Quick Actions #}
+        <div class="vf-product-card__actions">
+            <salla-add-product-btn product-id="{{ product.id }}" class="vf-product-card__action-btn">
+                <i class="sicon-shopping-bag"></i>
+            </salla-add-product-btn>
+
+            <salla-wishlist-btn product-id="{{ product.id }}" class="vf-product-card__action-btn">
+                <i class="sicon-heart"></i>
+            </salla-wishlist-btn>
+
+            <button class="vf-product-card__action-btn vf-quick-view-btn"
+                    data-product-id="{{ product.id }}"
+                    aria-label="Quick View">
+                <i class="sicon-eye"></i>
+            </button>
+        </div>
+    </div>
+
+    {# Product Info #}
+    <div class="vf-product-card__info">
+        {# Brand / Category #}
+        {% if product.brand %}
+            <span class="vf-product-card__brand">{{ product.brand.name }}</span>
+        {% elseif product.category %}
+            <span class="vf-product-card__brand">{{ product.category.name }}</span>
+        {% endif %}
+
+        {# Product Name #}
+        <h3 class="vf-product-card__title">
+            <a href="{{ product.url }}">{{ product.name }}</a>
+        </h3>
+
+        {# Rating #}
+        {% if product.rating and product.rating.count > 0 %}
+            <div class="vf-product-card__rating">
+                <div class="vf-stars">
+                    {% for i in 1..5 %}
+                        <i class="sicon-star{% if i > product.rating.stars %}-o{% endif %}"></i>
+                    {% endfor %}
+                </div>
+                <span class="vf-product-card__rating-count">({{ product.rating.count }})</span>
+            </div>
+        {% endif %}
+
+        {# Price #}
+        <div class="vf-product-card__price">
+            {% if product.is_on_sale %}
+                <span class="vf-price vf-price--sale">{{ product.sale_price }}</span>
+                <span class="vf-price vf-price--regular">{{ product.regular_price }}</span>
+            {% else %}
+                <span class="vf-price">{{ product.price }}</span>
+            {% endif %}
+        </div>
+
+        {# Color Swatches (if product has color options) #}
+        {% if product.options %}
+            {% for option in product.options %}
+                {% if option.name|lower in ['color', 'اللون', 'لون'] %}
+                    <div class="vf-product-card__swatches">
+                        {% for value in option.values|slice(0, 5) %}
+                            <span class="vf-swatch" style="background-color: {{ value.color | default('#ccc') }}" title="{{ value.name }}"></span>
+                        {% endfor %}
+                        {% if option.values|length > 5 %}
+                            <span class="vf-swatch vf-swatch--more">+{{ option.values|length - 5 }}</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
