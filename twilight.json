@@ -29,7 +29,52 @@
         "menu-images",
         "filters"
     ],
-    "settings": [],
+    "settings": [
+        {
+            "id": "dropdown_list_1",
+            "type": "items",
+            "format": "dropdown-list",
+            "label": "Dropdown List 1",
+            "description": null,
+            "labelHTML": null,
+            "icon": "sicon-keyboard_arrow_down",
+            "selected": [],
+            "options": [],
+            "source": "Manual",
+            "multichoice": true,
+            "searchable": true,
+            "required": false
+        },
+        {
+            "id": "dropdown_list",
+            "type": "items",
+            "format": "dropdown-list",
+            "label": "Dropdown List",
+            "description": null,
+            "labelHTML": null,
+            "icon": "sicon-keyboard_arrow_down",
+            "selected": [],
+            "options": [],
+            "source": "Manual",
+            "multichoice": true,
+            "searchable": true,
+            "required": false
+        },
+        {
+            "id": "collection",
+            "type": "collection",
+            "format": "collection",
+            "label": "Collection",
+            "description": null,
+            "labelHTML": null,
+            "item_label": null,
+            "icon": "sicon-list-add",
+            "fields": [],
+            "value": [],
+            "minLength": 1,
+            "maxLength": 5
+        }
+    ],
     "components": [
         {
             "name": "collection-grid",
