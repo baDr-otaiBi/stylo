@@ -1,198 +1,109 @@
 {
-    "settings": [
-        {
-            "id": "title",
-            "type": "static",
-            "format": "title",
-            "label": "Title",
-            "value": null,
-            "variant": "h1",
-            "icon": "sicon-format-text"
-        },
-        {
-            "id": "line",
-            "type": "static",
-            "format": "line",
-            "label": "Line",
-            "icon": "sicon-minus"
-        },
-        {
-            "id": "description",
-            "type": "static",
-            "format": "description",
-            "label": "Description",
-            "value": null,
-            "variant": "h1",
-            "icon": "sicon-format-size"
-        },
-        {
-            "id": "checkbox",
-            "type": "boolean",
-            "format": "checkbox",
-            "label": "Checkbox",
-            "description": null,
-            "labelHTML": null,
-            "icon": "sicon-check-square",
-            "value": true,
-            "selected": false,
-            "required": false
-        },
-        {
-            "id": "icon_picker",
-            "type": "string",
-            "format": "icon",
-            "label": "Icon Picker",
-            "description": null,
-            "labelHTML": null,
-            "icon": "sicon-user-circle",
-            "value": "sicon-store",
-            "required": false
-        },
-        {
-            "id": "integer",
-            "type": "number",
-            "format": "integer",
-            "inputType": "number",
-            "label": "Integer",
-            "description": null,
-            "labelHTML": null,
-            "placeholder": "Input an integer number between 5 and 50.",
-            "icon": "sicon-hashtag",
-            "value": null,
-            "required": false,
-            "minimum": 0,
-            "maximum": 50
-        },
-        {
-            "id": "url",
-            "type": "string",
-            "format": "url",
-            "inputType": "url",
-            "label": "URL",
-            "description": null,
-            "labelHTML": null,
-            "placeholder": "e.g. https://salla.sa",
-            "icon": "sicon-link",
-            "value": null,
-            "required": false,
-            "minLength": 6,
-            "maxLength": 30
-        }
-    ],
-    "theme_settings": {
-        "topnav_is_dark": {
-            "type": "checkbox",
-            "label": "Dark Top Navigation",
-            "default": false
-        },
-        "hero_overlay_opacity": {
-            "type": "range",
-            "label": "Hero Overlay Opacity",
-            "default": 40,
-            "min": 0,
-            "max": 100
-        },
-        "show_collection_grid": {
-            "type": "checkbox",
-            "label": "Show Collection Grid on Home",
-            "default": true
-        },
-        "show_trending_badge": {
-            "type": "checkbox",
-            "label": "Show Trending Badge on Products",
-            "default": true
-        },
-        "product_card_style": {
-            "type": "select",
-            "label": "Product Card Style",
-            "options": [
-                "minimal",
-                "overlay",
-                "classic"
-            ],
-            "default": "minimal"
-        },
-        "show_size_guide": {
-            "type": "checkbox",
-            "label": "Show Size Guide on Product Page",
-            "default": true
-        },
-        "instagram_feed_enabled": {
-            "type": "checkbox",
-            "label": "Enable Instagram Feed Section",
-            "default": true
-        },
-        "newsletter_style": {
-            "type": "select",
-            "label": "Newsletter Section Style",
-            "options": [
-                "minimal",
-                "fullwidth",
-                "split"
-            ],
-            "default": "split"
-        }
+  "name": "STYLO",
+  "settings": {
+    "version": "1.0.0",
+    "theme_name": "STYLO",
+    "repo_url": "",
+    "support_url": "https://t.me/salladev"
+  },
+  "theme_settings": {
+    "topnav_is_dark": {
+      "type": "checkbox",
+      "label": "Dark Top Navigation",
+      "default": false
     },
-    "features": [
-        "component-featured-products",
-        "component-fixed-banner",
-        "component-products-slider",
-        "component-photos-slider",
-        "component-parallax-background",
-        "component-testimonials",
-        "component-square-photos",
-        "component-store-features",
-        "mega-menu",
-        "fonts",
-        "color",
-        "breadcrumb",
-        "unite-cards-height",
-        "component-fixed-products",
-        "component-random-testimonials",
-        "component-youtube"
-    ],
-    "components": [
-        {
-            "name": "collection-grid",
-            "title": "Collection Grid",
-            "icon": "sicon-grid",
-            "path": "home.collection-grid"
-        },
-        {
-            "name": "trending-products",
-            "title": "Trending Products",
-            "icon": "sicon-fire",
-            "path": "home.trending-products"
-        },
-        {
-            "name": "lookbook",
-            "title": "Lookbook Gallery",
-            "icon": "sicon-camera",
-            "path": "home.lookbook"
-        },
-        {
-            "name": "instagram-feed",
-            "title": "Instagram Feed",
-            "icon": "sicon-instagram",
-            "path": "home.instagram-feed"
-        },
-        {
-            "name": "newsletter-fashion",
-            "title": "Fashion Newsletter",
-            "icon": "sicon-mail",
-            "path": "home.newsletter-fashion"
-        },
-        {
-            "name": "brands-showcase",
-            "title": "Brands Showcase",
-            "icon": "sicon-star",
-            "path": "home.brands-showcase"
-        },
-        {
-            "name": "size-guide",
-            "title": "Size Guide Modal",
-            "icon": "sicon-ruler",
-            "path": "product.size-guide"
-        }
-    ]
+    "hero_overlay_opacity": {
+      "type": "range",
+      "label": "Hero Overlay Opacity",
+      "default": 40,
+      "min": 0,
+      "max": 100
+    },
+    "show_collection_grid": {
+      "type": "checkbox",
+      "label": "Show Collection Grid on Home",
+      "default": true
+    },
+    "show_trending_badge": {
+      "type": "checkbox",
+      "label": "Show Trending Badge on Products",
+      "default": true
+    },
+    "product_card_style": {
+      "type": "select",
+      "label": "Product Card Style",
+      "options": ["minimal", "overlay", "classic"],
+      "default": "minimal"
+    },
+    "show_size_guide": {
+      "type": "checkbox",
+      "label": "Show Size Guide on Product Page",
+      "default": true
+    },
+    "instagram_feed_enabled": {
+      "type": "checkbox",
+      "label": "Enable Instagram Feed Section",
+      "default": true
+    },
+    "newsletter_style": {
+      "type": "select",
+      "label": "Newsletter Section Style",
+      "options": ["minimal", "fullwidth", "split"],
+      "default": "split"
+    }
+  },
+  "features": [
+    "component-featured-products",
+    "component-fixed-banner",
+    "component-products-slider",
+    "component-photos-slider",
+    "component-parallax-background",
+    "component-testimonials",
+    "component-square-photos",
+    "component-store-features"
+  ],
+  "components": [
+    {
+      "name": "collection-grid",
+      "title": "Collection Grid",
+      "icon": "sicon-grid",
+      "path": "home.collection-grid"
+    },
+    {
+      "name": "trending-products",
+      "title": "Trending Products",
+      "icon": "sicon-fire",
+      "path": "home.trending-products"
+    },
+    {
+      "name": "lookbook",
+      "title": "Lookbook Gallery",
+      "icon": "sicon-camera",
+      "path": "home.lookbook"
+    },
+    {
+      "name": "instagram-feed",
+      "title": "Instagram Feed",
+      "icon": "sicon-instagram",
+      "path": "home.instagram-feed"
+    },
+    {
+      "name": "newsletter-fashion",
+      "title": "Fashion Newsletter",
+      "icon": "sicon-mail",
+      "path": "home.newsletter-fashion"
+    },
+    {
+      "name": "brands-showcase",
+      "title": "Brands Showcase",
+      "icon": "sicon-star",
+      "path": "home.brands-showcase"
+    },
+    {
+      "name": "size-guide",
+      "title": "Size Guide Modal",
+      "icon": "sicon-ruler",
+      "path": "product.size-guide"
+    }
+  ]
 }
