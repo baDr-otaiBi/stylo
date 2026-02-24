@@ -1,0 +1,359 @@
+/* ==========================================
+   STYLO - Luxury Fashion Theme
+   Premium styling overrides for Salla stores
+   ========================================== */
+
+/* ---- Variables ---- */
+:root {
+    --stylo-cream: #FAF8F5;
+    --stylo-sand: #E8E0D4;
+    --stylo-gold: #B8977E;
+    --stylo-charcoal: #2C2C2C;
+    --stylo-black: #1A1A1A;
+    --stylo-white: #FFFFFF;
+    --stylo-transition: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ---- Global ---- */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* ---- Announcement Bar ---- */
+.stylo-announcement {
+    background: var(--stylo-black);
+    color: var(--stylo-white);
+    padding: 8px 0;
+    font-size: 0.6875rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-align: center;
+
+    &__text {
+        opacity: 0.9;
+    }
+}
+
+/* ---- Header ---- */
+.stylo-header {
+    .top-navbar {
+        display: none;
+    }
+}
+
+.stylo-nav {
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    box-shadow: none !important;
+    
+    .navbar-brand img {
+        max-height: 48px;
+        width: auto;
+        max-width: 170px;
+    }
+}
+
+.stylo-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    color: var(--stylo-charcoal);
+    cursor: pointer;
+    transition: color 0.3s;
+    
+    &:hover {
+        color: var(--stylo-black);
+    }
+}
+
+/* ---- Hero Slider ---- */
+.stylo-hero {
+    .swiper-slide {
+        min-height: 400px !important;
+        
+        @media (min-width: 1024px) {
+            min-height: 600px !important;
+        }
+    }
+
+    .overlay-bg {
+        background: linear-gradient(135deg, rgba(0,0,0,0.55), rgba(0,0,0,0.2)) !important;
+    }
+}
+
+.stylo-hero__tag {
+    display: inline-block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--stylo-gold);
+    margin-bottom: 1rem;
+}
+
+.stylo-hero__title {
+    font-size: clamp(1.75rem, 5vw, 3.5rem) !important;
+    font-weight: 500 !important;
+    line-height: 1.15 !important;
+    margin-bottom: 1rem !important;
+    letter-spacing: -0.01em;
+}
+
+.stylo-hero__desc {
+    font-size: 1rem;
+    line-height: 1.7;
+    opacity: 0.85;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+/* ---- Section Titles ---- */
+.s-block__title {
+    margin-bottom: 2rem !important;
+    
+    h2 {
+        font-weight: 500 !important;
+        letter-spacing: 0.01em;
+        font-size: 1.5rem !important;
+        
+        @media (min-width: 1024px) {
+            font-size: 1.875rem !important;
+        }
+    }
+}
+
+/* ---- Product Cards ---- */
+.s-product-card-entry {
+    border-radius: 0 !important;
+    overflow: hidden;
+    transition: transform 0.5s var(--stylo-transition),
+                box-shadow 0.5s var(--stylo-transition);
+    
+    &:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 48px rgba(0,0,0,0.08);
+    }
+}
+
+.s-product-card-image {
+    overflow: hidden;
+    
+    img {
+        transition: transform 0.7s var(--stylo-transition) !important;
+    }
+    
+    &:hover img {
+        transform: scale(1.06);
+    }
+}
+
+.s-product-card-content-main {
+    .s-product-card-content-title {
+        font-weight: 500;
+        font-size: 0.9375rem;
+    }
+}
+
+/* ---- Buttons ---- */
+.s-button-element.s-button-primary {
+    border-radius: 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    font-size: 0.8125rem !important;
+    font-weight: 500 !important;
+    min-height: 48px;
+}
+
+.s-button-element.s-button-outline {
+    border-radius: 0 !important;
+}
+
+/* ---- Newsletter ---- */
+.stylo-newsletter {
+    background: var(--stylo-cream);
+    
+    &__title {
+        font-size: clamp(1.25rem, 3vw, 1.875rem);
+        font-weight: 500;
+        color: var(--stylo-black);
+        margin-bottom: 0.5rem;
+    }
+    
+    &__desc {
+        color: #6B7280;
+        font-size: 0.9375rem;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+}
+
+/* ---- Footer ---- */
+.stylo-footer {
+    background-color: var(--stylo-black) !important;
+    margin-top: 0 !important;
+    
+    .store-footer__inner {
+        background-color: #111111 !important;
+        border-bottom-color: rgba(255,255,255,0.08) !important;
+    }
+}
+
+.stylo-footer__brand {
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em;
+}
+
+.stylo-footer__heading {
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.25rem !important;
+}
+
+/* ---- Breadcrumbs ---- */
+salla-breadcrumb {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* ---- Product Page ---- */
+.details-slider {
+    border-radius: 0 !important;
+    
+    .s-product-slider-image {
+        border-radius: 0 !important;
+    }
+}
+
+.product-form {
+    .form-label b {
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-size: 0.8125rem;
+    }
+}
+
+/* ---- Wishlist Button ---- */
+.btn--wishlist {
+    backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.85) !important;
+    border-radius: 50% !important;
+    
+    &:hover {
+        background: var(--stylo-black) !important;
+        color: var(--stylo-white) !important;
+    }
+}
+
+/* ---- Cart Badge ---- */
+.s-cart-summary-count {
+    background-color: var(--stylo-black) !important;
+}
+
+/* ---- Categories (Main Links) ---- */
+.s-block--categories {
+    .slide--cat-entry {
+        i {
+            font-size: 1.75rem;
+            color: var(--stylo-charcoal);
+            transition: color 0.3s;
+        }
+        
+        &:hover i {
+            color: var(--stylo-gold);
+        }
+        
+        h2 {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+    }
+}
+
+/* ---- Featured Products Tabs ---- */
+.s-block-tabs {
+    background: var(--stylo-cream) !important;
+    
+    .tab-trigger {
+        border-radius: 0 !important;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-size: 0.8125rem;
+    }
+}
+
+/* ---- Slider with Background ---- */
+.s-block--slider-with-bg {
+    .slider-bg {
+        min-height: 200px;
+        
+        @media (min-width: 1024px) {
+            min-height: 280px;
+        }
+    }
+    
+    h3 {
+        font-weight: 500;
+        letter-spacing: 0.01em;
+    }
+}
+
+/* ---- Store Features ---- */
+.s-block--store-features {
+    background: var(--stylo-cream);
+    padding: 2rem 0;
+    
+    @media (min-width: 1024px) {
+        padding: 3rem 0;
+    }
+}
+
+/* ---- Filters ---- */
+salla-filters {
+    border-radius: 0 !important;
+}
+
+/* ---- Forms ---- */
+.form-input {
+    border-radius: 0 !important;
+    border-color: #E5E7EB;
+    
+    &:focus {
+        border-color: var(--stylo-black);
+        box-shadow: none;
+    }
+}
+
+/* ---- Modals ---- */
+.swal2-popup {
+    border-radius: 0 !important;
+}
+
+/* ---- Scrollbar (WebKit) ---- */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    
+    &:hover {
+        background: #999;
+    }
+}
